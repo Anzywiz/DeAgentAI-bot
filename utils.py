@@ -102,7 +102,7 @@ def login_user(session, private_key, platform="deagent_ai"):
             "wallet_address": address,
             "sign_message": message,
             "signature": f"{signature}",
-            "referral_code": "VJJteCCQ",
+            "referral_code": "",
             "chain": "Movement EVM Testnet",
             "da_addr": da_addr
         }
@@ -116,7 +116,7 @@ def login_user(session, private_key, platform="deagent_ai"):
             "platform": "original",
             "signature": signature,
             "address": address,
-            "invitationCode": "a3SH",
+            "invitationCode": "",
             "message": message,
             "chain": "ethereum"
         }
