@@ -6,7 +6,7 @@ Python-based script to automate daily tasks (Alpha X, Twitter, and Discord) on t
 ---
 
 ## ⚠️ Warning
-Using this script may be against the Terms and Conditions of [DeAgent](https://deagent.ai/). Proceed at your own discretion. The author of this script are not responsible for any consequences arising from its use.
+Using this script may be against the Terms and Conditions of [DeAgent](https://deagent.ai/). Proceed at your own discretion. The author of this script is not responsible for any consequences arising from its use.
 
 ---
 
