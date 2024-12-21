@@ -48,8 +48,24 @@ def get_key_auth_pairs(file_path="config.json"):
     return result
 
 
+class TimeoutSession(requests.Session):
+    DEFAULT_TIMEOUT = 10  # Set your default timeout value here
+
+    """
+    create a timeout for requests as it doesnt have one in requests session
+    """
+    def __init__(self, timeout=DEFAULT_TIMEOUT):
+        super().__init__()
+        self.timeout = timeout
+
+    def request(self, *args, **kwargs):
+        if 'timeout' not in kwargs:
+            kwargs['timeout'] = self.timeout
+        return super().request(*args, **kwargs)
+
+
 def get_session(use_proxies=True):
-    with requests.Session() as session:
+    with TimeoutSession() as session:
         if use_proxies is True:
             if proxies:  # is not None or ""
                 PROXIES = {
@@ -230,13 +246,13 @@ def daily_twitter_task(session, uid):
     verify_tasks(session, uid, twitter_daily_task_id)
 
 
-def daily_discord_task(session, discord_auth, uid):
-    discord_gm(session, discord_auth)
+def daily_discord_task(session, uid):
+    # discord_gm(session, discord_auth) # sending `gm` no longer required
     task_id = 10
     verify_tasks(session, uid, task_id)
     json_response = collect_points(session, uid, task_id)
     if json_response == "User already completed the task":
-        logging.error(f"User {uid}: Discord Task failed, Connect a valid discord account to the DA profile")
+        logging.error(f"User {uid}: Discord Task failed, Connect a valid discord account to DA")
     else:
         logging.info(f"User {uid}: Performing Discord Daily Task: `{json_response}`")
 
@@ -282,14 +298,10 @@ def perform_daily_task(private_key, discord_auth):
 
     for task_id in remaining_daily_task_ids:
         if task_id == 10:
-            if discord_auth is not None:
-                pass
-            else:
-                continue
             # grab score before
             point_before, logged_points_b4 = get_user_log_points(session, uid)
 
-            daily_discord_task(session, discord_auth, uid)
+            daily_discord_task(session, uid)
 
             point_after, logged_points = get_user_log_points(session, uid)
             logging.info(f"User {uid}:Performed daily Discord Task. Point claimed {point_after - point_before}")
