@@ -239,7 +239,7 @@ def daily_twitter_task(session, uid):
 
     json_response = collect_points(session, uid, twitter_daily_task_id)
     if json_response == "User already completed the task":
-        logging.error(f"User {uid}: Twitter Task failed, make sure you connected a valid Twitter account to the DA")
+        logging.error(f"User {uid}: Twitter Task failed. Connect a valid Twitter to DA")
     else:
         logging.info(f"User {uid}: Performing Twitter Daily Task: `{json_response}`")
 
@@ -304,7 +304,11 @@ def perform_daily_task(private_key, discord_auth):
             daily_discord_task(session, uid)
 
             point_after, logged_points = get_user_log_points(session, uid)
-            logging.info(f"User {uid}:Performed daily Discord Task. Point claimed {point_after - point_before}")
+            points = point_after - point_before
+            if points > 0:
+                logging.info(f"User {uid}:Performed daily Discord Task. Point claimed {points}")
+            else:
+                logging.error(f"User {uid}: Discord Task NOT performed")
 
         elif task_id == 11:
             # grab score before
@@ -313,8 +317,13 @@ def perform_daily_task(private_key, discord_auth):
             daily_twitter_task(session, uid)
 
             point_after, logged_points = get_user_log_points(session, uid)
-            logging.info(f"User {uid}: Performed daily twitter Task. Point claimed {point_after - point_before}")
 
+            points = point_after - point_before
+
+            if points > 0:
+                logging.info(f"User {uid}:Performed daily Twitter Task. Point claimed {points}")
+            else:
+                logging.error(f"User {uid}: Twitter Task NOT performed")
         elif task_id == 34:
             # grab score before
             point_before, logged_points_b4 = get_user_log_points(session, uid)

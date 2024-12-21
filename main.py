@@ -1,4 +1,4 @@
-from utils import perform_daily_task, get_key_auth_pairs, max_threads
+from utils import perform_daily_task, get_key_auth_pairs, max_threads, logging
 import random
 from concurrent.futures import ThreadPoolExecutor
 
@@ -12,5 +12,5 @@ with ThreadPoolExecutor(max_workers=max_threads) as executor:
         try:
             future.result()
         except Exception as e:
-            print(e)
+            logging.error(e)
             continue
